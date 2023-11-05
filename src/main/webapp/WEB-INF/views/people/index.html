@@ -5,7 +5,9 @@
     <title>Index</title>
 </head>
 <body>
-
+    Список посетителей библеотеки:
+    <br/>
+    <br/>
 <div th:each="person : ${people}">
     <a th:href="@{/people/{id}(id=${person.getId()})}"
        th:text="${person.getFIO() + ', ' + person.getYear()}">user</a>
@@ -14,6 +16,7 @@
 <hr/>
 
 <a href="/people/new">Добавить человека</a>
-
+    <br/>
+    <a href="/">Вернуться к выбору списка</a>
 </body>
 </html>
