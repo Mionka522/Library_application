@@ -8,7 +8,6 @@ public class Person {
     private int id;
     @NotEmpty(message = "Поле не должно быть пустое")
     @Size(min = 2, max = 30, message = "ФИО не может быть меньше 2 и более 30 символов")
-    @Pattern(regexp = "[A-Z]\\w+\s[A-Z]\\w+\s[A-Z]\\w+", message = "Должен быть формат Фамилия Имя Очество")
     private String FIO;
     @NotEmpty(message = "Поле не должно быть пустое")
     @Size(min = 3, max = 5, message = "Введите корректный год рождения")
