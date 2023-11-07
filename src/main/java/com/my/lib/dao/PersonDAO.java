@@ -51,4 +51,9 @@ public class PersonDAO {
         return jdbcTemplate.query("SELECT * FROM book WHERE person_id=?", new Object[]{id},
                 new BeanPropertyRowMapper<>(Book.class));
     }
+    public Optional<Person> getFIOval(String FIO) {
+        return jdbcTemplate.query("SELECT * FROM Person WHERE FIO=?", new Object[]{FIO},
+                        new BeanPropertyRowMapper<>(Person.class))
+                .stream().findAny();
+    }
 }

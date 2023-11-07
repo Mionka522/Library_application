@@ -2,7 +2,7 @@ package com.my.lib.controllers;
 
 import com.my.lib.dao.PersonDAO;
 import com.my.lib.model.Person;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.my.lib.util.PersonValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,9 +14,11 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PersonController {
     private final PersonDAO personDAO;
+    private final PersonValidator personValidator;
 
-    public PersonController(PersonDAO personDAO) {
+    public PersonController(PersonDAO personDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
+        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -40,6 +42,8 @@ public class PersonController {
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult) {
+        personValidator.validate(person,bindingResult);
+
         if (bindingResult.hasErrors())
             return "people/new";
 
@@ -56,6 +60,8 @@ public class PersonController {
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
                          @PathVariable("id") int id) {
+        personValidator.validate(person,bindingResult);
+
         if (bindingResult.hasErrors())
             return "people/edit";
 

@@ -4,6 +4,7 @@ import com.my.lib.dao.BookDAO;
 import com.my.lib.dao.PersonDAO;
 import com.my.lib.model.Book;
 import com.my.lib.model.Person;
+import com.my.lib.util.BookValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,11 +19,13 @@ import java.util.Optional;
 public class BookController {
     private final BookDAO bookDAO;
     private final PersonDAO personDAO;
+    private final BookValidator bookValidator;
 
     @Autowired
-    public BookController(BookDAO bookDAO, PersonDAO personDAO) {
+    public BookController(BookDAO bookDAO, PersonDAO personDAO, BookValidator bookValidator) {
         this.bookDAO = bookDAO;
         this.personDAO = personDAO;
+        this.bookValidator = bookValidator;
     }
 
 
@@ -53,6 +56,7 @@ public class BookController {
     @PostMapping()
     public String create(@ModelAttribute("book") @Valid Book book,
                          BindingResult bindingResult) {
+        bookValidator.validate(book,bindingResult);
         if (bindingResult.hasErrors())
             return "book/new";
 
@@ -69,6 +73,8 @@ public class BookController {
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult,
                          @PathVariable("id") int id) {
+        bookValidator.validate(book,bindingResult);
+
         if (bindingResult.hasErrors())
             return "book/edit";
 
@@ -80,6 +86,16 @@ public class BookController {
     public String delete(@PathVariable("id") int id) {
         bookDAO.delete(id);
         return "redirect:/book";
+    }
+    @PatchMapping("/{id}/release")
+    public String release(@PathVariable("id") int id) {
+        bookDAO.release(id);
+        return "redirect:/book/"+id;
+    }
+    @PatchMapping("/{id}/assign")
+    public String assign(@PathVariable("id") int id,@ModelAttribute("person") Person selectedPerson) {
+        bookDAO.assign(id,selectedPerson);
+        return "redirect:/book/" + id;
     }
 
 }
