@@ -9,14 +9,19 @@
     <br/>
     <br/>
 <div th:each="person : ${people}">
-    <a th:href="@{/people/{id}(id=${person.getId()})}"
+    <a th:href="@{/people/{id_person}(id_person=${person.getId()})}"
        th:text="${person.getFIO() + ', ' + person.getYear()}">user</a>
 </div>
 <br/>
 <hr/>
 
-<a href="/people/new">Добавить человека</a>
+    <form th:method="GET" th:action="@{/people/new}">
+        <input type="submit" value="Добавить нового человека"/>
+    </form>
     <br/>
-    <a href="/">Вернуться к выбору списка</a>
+    <br/>
+    <form th:method="GET" th:action="@{/}">
+        <input type="submit" value="Вернуться к выбору списка"/>
+    </form>
 </body>
 </html>
